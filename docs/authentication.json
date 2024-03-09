@@ -1,0 +1,421 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "RW 05 BGM PIK APP LOGIN / REGISTER SYSTEM",
+        "description": "RW 05 BGM PIK APP LOGIN / REGISTER SYSTEM",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:8080"
+        }
+    ],
+    "components": {
+        "parameters": {
+            "authorization": {
+                "schema": {
+                    "type": "string"
+                },
+                "required": true,
+                "name": "Authorization",
+                "in": "header",
+                "examples": {
+                    "token": {
+                        "value": "adasdsa"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "401Unauthorized": {
+                "description": "Gagal mengakses resource saat user tidak mengirim token",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "examples": {
+                            "token tidak dikirim": {
+                                "summary": "failed",
+                                "value": {
+                                    "errors": "Unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "summary": "User register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ipl": {
+                                        "description": "nomor ipl yang sudah terdaftar disistem",
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 13,
+                                        "maxLength": 20
+                                    },
+                                    "email": {
+                                        "description": "user email",
+                                        "required": true,
+                                        "type": "string",
+                                        "format": "email",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    },
+                                    "phone": {
+                                        "description": "nomor telpon yang digunakan warga untuk daftar",
+                                        "required": true,
+                                        "type": "string",
+                                        "minimum": 5,
+                                        "maximum": 20
+                                    },
+                                    "password": {
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "valid request body": {
+                                    "value": {
+                                        "ipl": "bgm/rw/ag1/001",
+                                        "email": "feriwnarta26@gmail.com",
+                                        "phone": "085714342528",
+                                        "password": "feripassword"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sukses register akun",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "setelah berhasil mendapatkan token, harap lakukan panggilan api untuk verifikasi user login",
+                                        "value": {
+                                            "data": {
+                                                "token": "randomtoken",
+                                                "message": "Please process method to sending link verify"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "summary": "user login",
+                "description": "user login menggunakan nomor ipl / email / nomor telpon",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "identifier": {
+                                        "type": "string",
+                                        "required": true,
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "required": true,
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "login dengan email": {
+                                    "value": {
+                                        "identifer": "feriwnarta26@gmail.com",
+                                        "password": "feripassword"
+                                    }
+                                },
+                                "login dengan ipl": {
+                                    "value": {
+                                        "identifer": "bgm/rw/ag1/010",
+                                        "password": "feripassword"
+                                    }
+                                },
+                                "login dengan nomor telpon": {
+                                    "value": {
+                                        "identifer": "085714342528",
+                                        "password": "feripassword"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "sukses login, token dikirim kemudian akan melakukan pilihan pengiriman link verifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "setelah berhasil mendapatkan token, harap lakukan panggilan api untuk verifikasi user login",
+                                        "value": {
+                                            "data": {
+                                                "token": "asdadasd",
+                                                "message": "Please process method to sending link verify"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "gagal login karena validasi properti gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "username gagal validasi": {
+                                        "value": {
+                                            "errors": [
+                                                "Identifier field must be 5 character"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "gagal login karena email atau password salah",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "identifer atau password salah": {
+                                        "value": {
+                                            "errors": [
+                                                "Invalid login credentialss"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/verifications/whatsapp": {
+            "post": {
+                "summary": "kirim link verifkasi ke whatsappp",
+                "description": "kirim link verifikasi user login / register ke whatsapp",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "sukses kirim link verifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "token": "asdasd"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Pengecekan apakah user sudah verifikasi",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user berhasil verifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "token": "asdasd",
+                                                "refresh_token": "asdasdsad"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "description": "user belum diverifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "user berlum verifikasi": {
+                                        "value": {
+                                            "errors": [
+                                                "Your account is not yet verified"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/verifications/email": {
+            "post": {
+                "summary": "kirim link verifkasi ke email",
+                "description": "kirim link verifikasi user login / register ke email",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "sukses kirim link verifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "token": "asdasd"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Pengecekan apakah user sudah verifikasi",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user berhasil verifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "token": "asdasd",
+                                                "refresh_token": "asdasdsad"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "description": "user belum diverifikasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "user belum verifikasi": {
+                                        "value": {
+                                            "errors": [
+                                                "Your account is not yet verified"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
