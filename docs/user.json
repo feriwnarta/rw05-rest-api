@@ -1,15 +1,375 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Title",
-        "description": "Title",
+        "title": "User API",
+        "description": "User API ini mengurus profile, avatar, notification, user data",
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "https"
+            "url": "https://localhost:8000"
         }
     ],
+    "components": {
+        "parameters": {
+            "authorization": {
+                "schema": {
+                    "type": "string"
+                },
+                "required": true,
+                "name": "Authorization",
+                "in": "header",
+                "examples": {
+                    "token": {
+                        "value": "adasdsa"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "401Unauthorized": {
+                "description": "Gagal mengakses resource saat user tidak mengirim token",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "examples": {
+                            "token tidak dikirim": {
+                                "summary": "failed",
+                                "value": {
+                                    "errors": "Unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "paths": {
+        "/users/profile": {
+            "get": {
+                "summary": "dapatkan data user",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sukses dapatkan data user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "ipl": "bgm/rw/ag1/001",
+                                                "email": "feriwnarta26@gmail.com",
+                                                "phone": "0857134342528",
+                                                "avatar": "https://localhost:8000/content/avatars/asdhasjkdhaksd312.jpg"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "summary": "update data user",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "avatar": {
+                                        "description": "update user profile picture",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "fullname": {
+                                        "description": "update nama lengkap user",
+                                        "type": "string",
+                                        "minLength": 2,
+                                        "maxLength": 50
+                                    },
+                                    "email": {
+                                        "description": "update email user",
+                                        "type": "string",
+                                        "format": "email",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Berhasil update data user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success ganti email": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "avatar": "https://localhost:8000/avatars/asdasdad.jpg",
+                                                "fullname": "feriwinarta",
+                                                "email": "feriemailbaru@gmail.com",
+                                                "phone": "085714342528"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "validasi properti yang dikirim tidak sesuai",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "validasi email gagal": {
+                                        "value": {
+                                            "errors": [
+                                                "The email field must be format email"
+                                            ]
+                                        }
+                                    },
+                                    "validasi fullname gagal": {
+                                        "value": {
+                                            "errors": [
+                                                "The fullname field must be 5 or higher"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/users/profile/change-password": {
+            "post": {
+                "summary": "update password user",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "current_password": {
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    },
+                                    "new_password": {
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    },
+                                    "repeat_new_password": {
+                                        "required": true,
+                                        "type": "string",
+                                        "minLength": 5,
+                                        "maxLength": 50
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "success": {
+                                    "value": {
+                                        "current_password": "feripassword",
+                                        "new_password": "feripassword123",
+                                        "repeat_new_password": "feripassword123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Password berhasil diganti, akan tetapi tidak mengembalikan response body"
+                    },
+                    "400": {
+                        "description": "gagal validasi properti yang dikirim",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "password baru kurang dari 5": {
+                                        "value": {
+                                            "errors": [
+                                                "The new password field must be 5 characters"
+                                            ]
+                                        }
+                                    },
+                                    "password baru tidak sesuai": {
+                                        "description": "password baru tidak sesuai dengan password yang diulangi",
+                                        "value": {
+                                            "errors": [
+                                                "The repeat new password field must be same with new password field"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "description": "Password lama salah",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "password lama salah": {
+                                        "value": {
+                                            "errors": [
+                                                "The repeat new password field must be same with new password field"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/notifications": {
+            "get": {
+                "summary": "dapatkan daftar notifikasi user",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "daftar notifikasi user dengan format cursor laravel",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "avatar": "https://localhost:8000/avatars/asdasd21.jpg",
+                                                    "title": "Donnita Q menanggapi postinganmu",
+                                                    "time": "10 menit yang lalu",
+                                                    "data": "Di Cafe Cahaya Senja enak untuk nongkrong dan makanan nya recomended :)"
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "avatar": "https://localhost:8000/avatars/asdasd21.jpg",
+                                                    "title": "Donnita Q menanggapi postinganmu",
+                                                    "time": "11 menit yang lalu",
+                                                    "data": "Ayo kita kesanaa"
+                                                }
+                                            ],
+                                            "links": {
+                                                "next_page_url": "https://localhost:8000/users/notifications?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_page_url": null
+                                            },
+                                            "meta": {
+                                                "path": "http:\/\/127.0.0.1:8000",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/environment-care/statistic": {
+            "get": {
+                "summary": "dapatkan statistik laporan yang dibuat",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan statisik komplain",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "total_environment_cate": 10,
+                                                "public_environment_care": 5,
+                                                "private_environment_care": 5
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
