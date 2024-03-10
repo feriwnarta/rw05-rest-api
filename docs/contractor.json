@@ -53,7 +53,11 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "type": "array"
+                            "type": "object",
+                            "items": {
+                                "type": "array",
+                                "minItems": 1
+                            }
                         },
                         "examples": {
                             "errors id not found": {
@@ -77,7 +81,7 @@
         }
     },
     "paths": {
-        "/contractors/public-environment-cares/incomings": {
+        "/contractors/environment-cares/public-request/incomings": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang baru masuk (menunggu) atau diterima",
                 "parameters": [
@@ -144,7 +148,7 @@
                 }
             }
         },
-        "/contractors/public-environment-cares/incomings/{id}": {
+        "/contractors/environment-cares/public-request/incomings/{id}": {
             "get": {
                 "description": "dapatkan detail laporan peduli lingkungan yang baru masuk atau diterima",
                 "parameters": [
@@ -263,7 +267,7 @@
                 }
             }
         },
-        "/contractors/public-environment-cares/processes": {
+        "/contractors/environment-cares/public-request/processes": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang diproses (process)",
                 "parameters": [
@@ -330,7 +334,7 @@
                 }
             }
         },
-        "/contractors/public-environment-cares/processes/{id}": {
+        "/contractors/environment-cares/public-request/processes/{id}": {
             "get": {
                 "description": "dapatkan detail laporan peduli lingkungan yang sedang diproses",
                 "parameters": [
@@ -448,7 +452,7 @@
                             }
                         }
                     },
-                    "401" : {
+                    "401": {
                         "$ref": "#/components/responses/401Unauthorized"
                     },
                     "422": {
@@ -457,7 +461,7 @@
                 }
             }
         },
-        "/contractors/public-environment-cares/successes": {
+        "/contractors/environment-cares/public-request/successes": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang telah selesai (success)",
                 "parameters": [
@@ -524,7 +528,7 @@
                 }
             }
         },
-        "/contractors/public-environment-cares/successes/{id}": {
+        "/contractors/environment-cares/public-request/successes/{id}": {
             "get": {
                 "parameters": [
                     {
@@ -661,6 +665,249 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/422Invalid"
+                    }
+                }
+            }
+        },
+        "/contractors/environment-cares/public-request/stats": {
+            "get": {
+                "summary": "dapatkan statistik laporan peduli lingkungan public",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan statisik",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "title": "penilaian landscape",
+                                                "line_chart_data": [
+                                                    {
+                                                        "title": "Taman dan kebersihan",
+                                                        "percentage": "75%",
+                                                        "point": [
+                                                            100,
+                                                            120,
+                                                            130
+                                                        ],
+                                                        "pic": "PT Delcoin"
+                                                    }
+                                                ],
+                                                "pie_chart_data": {
+                                                    "title": "Data laporan landscape",
+                                                    "point": [
+                                                        {
+                                                            "value": "32",
+                                                            "status": "Total laporan"
+                                                        },
+                                                        {
+                                                            "value": "12",
+                                                            "status": "Belum dikerjakan"
+                                                        },
+                                                        {
+                                                            "value": "8",
+                                                            "status": "Sedang dikerjakan"
+                                                        },
+                                                        {
+                                                            "value": "12",
+                                                            "status": "Selesai"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contractors/attendances": {
+            "get" : {
+                "summary": "dapatkan data absensi karyawan yang sedang login",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "sukses dapatkan data absensi karyawan yang sedang login",
+                        "content": {
+                            "application/json" : {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success" : {
+                                        "value": {
+                                            "data" : {
+                                                "month_year" : "Mei 2023",
+                                                "total" : "30",
+                                                "absence" : "2",
+                                                "present" : "28"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+
+                }
+            },
+            "post": {
+                "summary": "absensi karyawan masuk dan pulang",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "location": {
+                                        "type": "object",
+                                        "minProperties": 1,
+                                        "maxProperties": 1
+                                    },
+                                    "image_proof": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "timestamps": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "required": [
+                                    "image_proof",
+                                    "location",
+                                    "timestamps"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "sukses absensi masuk atau pulang",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success masuk kerja": {
+                                        "value": {
+                                            "data": {
+                                                "type": "entry time",
+                                                "address": "Jalan pantai golf island, PIK Jakarta Utara",
+                                                "time": "07:55"
+                                            }
+                                        }
+                                    },
+                                    "success pulang kerja": {
+                                        "value": {
+                                            "data": {
+                                                "type": "after work time",
+                                                "address": "Jalan pantai golf island, PIK Jakarta Utara",
+                                                "time": "17:00"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "response gagal saat lokasi tidak dikirim",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "type": "array"
+                                    }
+                                },
+                                "examples": {
+                                    "lokasi tidak dikirim": {
+                                        "value": {
+                                            "errors": [
+                                                "The location attendance is required"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/contractors/attendances/details" : {
+            "get" : {
+                "summary": "dapatkan details absensi karyawan yang sedang login",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "sukses dapatkan detail absensi karyawan",
+                        "content": {
+                            "application/json" : {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success" : {
+                                        "value": {
+                                            "data" : {
+                                                "month_year" : "Juli 2022",
+                                                "details" : [
+                                                    {
+                                                        "datetime" : "1 juli 2022",
+                                                        "entry_time" : "08:00",
+                                                        "after_work_time" : "17:00"
+                                                    },
+                                                    {
+                                                        "datetime" : "2 juli 2022",
+                                                        "entry_time" : "08:16",
+                                                        "after_work_time" : "17:10"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "$ref": "#/components/responses/401Unauthorized"
                     }
                 }
             }

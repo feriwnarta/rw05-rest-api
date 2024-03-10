@@ -339,7 +339,7 @@
                 }
             }
         },
-        "/users/environment-care/statistic": {
+        "/users/environment-cares/stats": {
             "get": {
                 "summary": "dapatkan statistik laporan yang dibuat",
                 "parameters": [
