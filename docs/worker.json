@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Contractor API",
-        "description": "Contractor API",
+        "title": "Worker API",
+        "description": "Worker API",
         "version": "1.0.0"
     },
     "servers": [
@@ -81,7 +81,7 @@
         }
     },
     "paths": {
-        "/contractors/environment-cares/public-request/incomings": {
+        "/workers/environment-cares/public-request/incomings": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang baru masuk (menunggu) atau diterima",
                 "parameters": [
@@ -98,7 +98,7 @@
                                     "type": "object"
                                 },
                                 "examples": {
-                                    "success": {
+                                    "success kepala kontraktor": {
                                         "value": {
                                             "data": [
                                                 {
@@ -111,7 +111,9 @@
                                                         "lng": ""
                                                     },
                                                     "time": "2 jam yang lalu",
-                                                    "thumbnail": "https://"
+                                                    "thumbnail": "https://",
+                                                    "role": "Kepala kontraktor",
+                                                    "pic": []
                                                 },
                                                 {
                                                     "id": "uuid",
@@ -123,7 +125,63 @@
                                                         "lng": ""
                                                     },
                                                     "time": "5 jam yang lalu",
-                                                    "thumbnail": "https://"
+                                                    "thumbnail": "https://",
+                                                    "role": "Kepala kontraktor",
+                                                    "pic": []
+                                                }
+                                            ],
+                                            "links": {
+                                                "next_page_url": "https://localhost:8000/contractors/public-environment-cares/incomings?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_page_url": null
+                                            },
+                                            "meta": {
+                                                "path": "http:/127.0.0.1:8000/contractors/public-environment-cares/incomings",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
+                                        }
+                                    },
+                                    "success manager kontraktor": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "waiting",
+                                                    "title": "Pohon tumbang",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "2 jam yang lalu",
+                                                    "thumbnail": "https://",
+                                                    "role": "Manager kontraktor",
+                                                    "pic": [
+                                                        {
+                                                            "name": "Jajang (kepala kontraktor)",
+                                                            "phone": "08571434231"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "accept",
+                                                    "title": "Pohon terlalu tinggi",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "5 jam yang lalu",
+                                                    "thumbnail": "https://",
+                                                    "role": "Manager kontraktor",
+                                                    "pic": [
+                                                        {
+                                                            "name": "Jajang (kepala kontraktor)",
+                                                            "phone": "08571434231"
+                                                        }
+                                                    ]
                                                 }
                                             ],
                                             "links": {
@@ -148,7 +206,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/incomings/{id}": {
+        "/workers/environment-cares/public-request/incomings/{id}": {
             "get": {
                 "description": "dapatkan detail laporan peduli lingkungan yang baru masuk atau diterima",
                 "parameters": [
@@ -267,7 +325,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/processes": {
+        "/workers/environment-cares/public-request/processes": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang diproses (process)",
                 "parameters": [
@@ -297,7 +355,9 @@
                                                         "lng": ""
                                                     },
                                                     "time": "2 jam yang lalu",
-                                                    "thumbnail": "https://"
+                                                    "thumbnail": "https://",
+                                                    "role": "Kepala kontraktor",
+                                                    "pic": []
                                                 },
                                                 {
                                                     "id": "uuid",
@@ -309,7 +369,9 @@
                                                         "lng": ""
                                                     },
                                                     "time": "5 jam yang lalu",
-                                                    "thumbnail": "https://"
+                                                    "thumbnail": "https://",
+                                                    "role": "Kepala kontraktor",
+                                                    "pic": []
                                                 }
                                             ],
                                             "links": {
@@ -334,7 +396,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/processes/{id}": {
+        "/workers/environment-cares/public-request/processes/{id}": {
             "get": {
                 "description": "dapatkan detail laporan peduli lingkungan yang sedang diproses",
                 "parameters": [
@@ -461,7 +523,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/successes": {
+        "/workers/environment-cares/public-request/successes": {
             "get": {
                 "summary": "dapatkan daftar laporan peduli lingkungan yang telah selesai (success)",
                 "parameters": [
@@ -503,7 +565,9 @@
                                                         "lng": ""
                                                     },
                                                     "time": "5 jam yang lalu",
-                                                    "thumbnail": "https://"
+                                                    "thumbnail": "https://",
+                                                    "role": "Kepala kontraktor",
+                                                    "pic": []
                                                 }
                                             ],
                                             "links": {
@@ -528,7 +592,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/successes/{id}": {
+        "/workers/environment-cares/public-request/successes/{id}": {
             "get": {
                 "parameters": [
                     {
@@ -669,7 +733,7 @@
                 }
             }
         },
-        "/contractors/environment-cares/public-request/stats": {
+        "/workers/environment-cares/public-request/stats": {
             "get": {
                 "summary": "dapatkan statistik laporan peduli lingkungan public",
                 "parameters": [
@@ -733,8 +797,8 @@
                 }
             }
         },
-        "/contractors/attendances": {
-            "get" : {
+        "/workers/attendances": {
+            "get": {
                 "summary": "dapatkan data absensi karyawan yang sedang login",
                 "parameters": [
                     {
@@ -742,21 +806,21 @@
                     }
                 ],
                 "responses": {
-                    "200" : {
+                    "200": {
                         "description": "sukses dapatkan data absensi karyawan yang sedang login",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "schema": {
                                     "type": "object"
                                 },
                                 "examples": {
-                                    "success" : {
+                                    "success": {
                                         "value": {
-                                            "data" : {
-                                                "month_year" : "Mei 2023",
-                                                "total" : "30",
-                                                "absence" : "2",
-                                                "present" : "28"
+                                            "data": {
+                                                "month_year": "Mei 2023",
+                                                "total": "30",
+                                                "absence": "2",
+                                                "present": "28"
                                             }
                                         }
                                     }
@@ -764,10 +828,9 @@
                             }
                         }
                     },
-                    "401" : {
+                    "401": {
                         "$ref": "#/components/responses/401Unauthorized"
                     }
-
                 }
             },
             "post": {
@@ -866,8 +929,8 @@
                 }
             }
         },
-        "/contractors/attendances/details" : {
-            "get" : {
+        "/workers/attendances/details": {
+            "get": {
                 "summary": "dapatkan details absensi karyawan yang sedang login",
                 "parameters": [
                     {
@@ -875,28 +938,28 @@
                     }
                 ],
                 "responses": {
-                    "200" : {
+                    "200": {
                         "description": "sukses dapatkan detail absensi karyawan",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "schema": {
                                     "type": "object"
                                 },
                                 "examples": {
-                                    "success" : {
+                                    "success": {
                                         "value": {
-                                            "data" : {
-                                                "month_year" : "Juli 2022",
-                                                "details" : [
+                                            "data": {
+                                                "month_year": "Juli 2022",
+                                                "details": [
                                                     {
-                                                        "datetime" : "1 juli 2022",
-                                                        "entry_time" : "08:00",
-                                                        "after_work_time" : "17:00"
+                                                        "datetime": "1 juli 2022",
+                                                        "entry_time": "08:00",
+                                                        "after_work_time": "17:00"
                                                     },
                                                     {
-                                                        "datetime" : "2 juli 2022",
-                                                        "entry_time" : "08:16",
-                                                        "after_work_time" : "17:10"
+                                                        "datetime": "2 juli 2022",
+                                                        "entry_time": "08:16",
+                                                        "after_work_time": "17:10"
                                                     }
                                                 ]
                                             }
@@ -906,7 +969,7 @@
                             }
                         }
                     },
-                    "401" : {
+                    "401": {
                         "$ref": "#/components/responses/401Unauthorized"
                     }
                 }
