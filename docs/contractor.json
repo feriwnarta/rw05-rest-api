@@ -1,0 +1,657 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Contractor API",
+        "description": "Contractor API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https"
+        }
+    ],
+    "components": {
+        "parameters": {
+            "authorization": {
+                "schema": {
+                    "type": "string"
+                },
+                "required": true,
+                "name": "Authorization",
+                "in": "header",
+                "examples": {
+                    "token": {
+                        "value": "adasdsa"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "401Unauthorized": {
+                "description": "Gagal mengakses resource saat user tidak mengirim token",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "examples": {
+                            "token tidak dikirim": {
+                                "summary": "failed",
+                                "value": {
+                                    "errors": "Unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/contractors/public-environment-cares/incomings": {
+            "get": {
+                "summary": "dapatkan daftar laporan peduli lingkungan yang baru masuk (menunggu) atau diterima",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan daftar laporan yang baru masuk atau diterima",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "waiting",
+                                                    "title": "Pohon tumbang",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "2 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "accept",
+                                                    "title": "Pohon terlalu tinggi",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "5 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                }
+                                            ],
+                                            "links": {
+                                                "next_page_url": "https://localhost:8000/contractors/public-environment-cares/incomings?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_page_url": null
+                                            },
+                                            "meta": {
+                                                "path": "http:/127.0.0.1:8000/contractors/public-environment-cares/incomings",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/contractors/public-environment-cares/incomings/{id}": {
+            "get": {
+                "description": "dapatkan detail laporan peduli lingkungan yang baru masuk atau diterima",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "description": "detail laporan peduli lingkungan",
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        },
+                        "required": true,
+                        "examples": {
+                            "id": {
+                                "value": "uuid"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response detail laporan peduli lingkungan yang baru masuk atau diterima",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "locations": {
+                                                    "address": "",
+                                                    "lat": "",
+                                                    "lng": ""
+                                                },
+                                                "complaints": [
+                                                    "Pohon tumbang"
+                                                ],
+                                                "picture_evidence_1": "https://",
+                                                "picture_evidence_2": "https://",
+                                                "description": ""
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "terima laporan yang sedang menunggu",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        },
+                        "required": true,
+                        "examples": {
+                            "id": {
+                                "value": "uuid"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses menerima laporan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "complaint": [
+                                                    "Pohon tumbang"
+                                                ],
+                                                "picture_evidence_1": "https://",
+                                                "picture_evidence_2": "https://",
+                                                "locations": {
+                                                    "address": "jln....",
+                                                    "lat": "",
+                                                    "lng": ""
+                                                },
+                                                "description": ""
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "description": "response saat id yang dikirim tidak ada didatabase",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "errors id not found": {
+                                        "value": {
+                                            "errors": [
+                                                "id environment care not found"
+                                            ]
+                                        }
+                                    },
+                                    "error id sudah diterima": {
+                                        "value": {
+                                            "errors": [
+                                                "environment care has been accepted"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contractors/public-environment-cares/processes": {
+            "get": {
+                "summary": "dapatkan daftar laporan peduli lingkungan yang diproses (process)",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan daftar laporan yang diproses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "process",
+                                                    "title": "Pohon tumbang",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "2 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "process",
+                                                    "title": "Pohon terlalu tinggi",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "5 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                }
+                                            ],
+                                            "links": {
+                                                "prev_page_url": null,
+                                                "next_page_url": "https://localhost:8000/contractors/public-environment-cares/processes?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0"
+                                            },
+                                            "meta": {
+                                                "path": "http:/127.0.0.1:8000/contractors/public-environment-cares/processes",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/contractors/public-environment-cares/processes/{id}": {
+            "get": {
+                "description": "dapatkan detail laporan peduli lingkungan yang sedang diproses",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        },
+                        "required": true,
+                        "examples": {
+                            "id": {
+                                "value": "uuid"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response detail proses laporan peduli lingkungan yang akan diprocess",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "status": "process",
+                                                "picture_evidence_1": "https://",
+                                                "picture_evidence_2": "https://",
+                                                "start_time": "2023-05-10 15:30:45"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "process laporan peduli lingkungan",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        },
+                        "required": true,
+                        "examples": {
+                            "id": {
+                                "value": "uuid"
+                            }
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "picture_process_1": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "picture_process_2": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "picture_process_1"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Berhasil proses laporan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "status": "process",
+                                                "picture_process_1": "https://",
+                                                "picture_process_2": "https://",
+                                                "start_time": "2023-05-10 15:30:45"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contractors/public-environment-cares/successes": {
+            "get": {
+                "summary": "dapatkan daftar laporan peduli lingkungan yang telah selesai (success)",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan daftar laporan yang telah selesai (success)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "success",
+                                                    "title": "Pohon tumbang",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "2 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "status": "success",
+                                                    "title": "Pohon terlalu tinggi",
+                                                    "locations": {
+                                                        "address": "jln....",
+                                                        "lat": "",
+                                                        "lng": ""
+                                                    },
+                                                    "time": "5 jam yang lalu",
+                                                    "thumbnail": "https://"
+                                                }
+                                            ],
+                                            "links": {
+                                                "prev_page_url": null,
+                                                "next_page_url": "https://localhost:8000/contractors/public-environment-cares/success?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0"
+                                            },
+                                            "meta": {
+                                                "path": "http:/127.0.0.1:8000/contractors/public-environment-cares/success",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        },
+        "/contractors/public-environment-cares/successes/{id}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "menampilkan detail laporan peduli lingkungan yang sudah selesai",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "picture_complete_1": "",
+                                                "picture_complete_2": "",
+                                                "history": {
+                                                    "work_duration": "1 jam 30 menit",
+                                                    "timelines": [
+                                                        {
+                                                            "id": "uuid",
+                                                            "title": "Laporan Selesai",
+                                                            "subtitle": "Laporan telah diselesaikan oleh kontraktor landscape.",
+                                                            "timestamps": "2023-05-10 15:30:45"
+                                                        },
+                                                        {
+                                                            "id": "uuid",
+                                                            "title": "Laporan Diproses",
+                                                            "subtitle": "Laporan sedang diproses oleh kontraktor landscape.",
+                                                            "timestamps": "2023-05-10 15:30:45"
+                                                        }
+                                                    ]
+                                                },
+                                                "star": "",
+                                                "complaints": [
+                                                    "Pohon tumbang"
+                                                ],
+                                                "locations": {
+                                                    "address": "jln....",
+                                                    "lat": "",
+                                                    "lng": ""
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "description": "menyelesaikan laporan peduli lingkungan",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        },
+                        "examples": {
+                            "valid id": {
+                                "value": "uuid"
+                            }
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "picture_complete_1": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "picture_complete_2": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "sukses menyelesaikan laporan peduli lingkungan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "message": "success finish environment care",
+                                                "work_duration": "2j : 45m : 30d"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            }
+        }
+    }
+}

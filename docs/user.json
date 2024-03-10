@@ -72,10 +72,11 @@
                                         "value": {
                                             "data": {
                                                 "id": "uuid",
-                                                "ipl": "bgm/rw/ag1/001",
                                                 "email": "feriwnarta26@gmail.com",
                                                 "phone": "0857134342528",
-                                                "avatar": "https://localhost:8000/content/avatars/asdhasjkdhaksd312.jpg"
+                                                "avatar": "https://localhost:8000/content/avatars/asdhasjkdhaksd312.jpg",
+                                                "role": "warga 05",
+                                                "address": "Akasia golf no 1"
                                             }
                                         }
                                     }

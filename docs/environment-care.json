@@ -53,7 +53,7 @@
     "paths": {
         "/environment-cares/public-requests": {
             "post": {
-                "description": "buat laporan peduli lingkungan baru",
+                "description": "buat laporan peduli lingkungan (complaint) baru",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/authorization"
@@ -118,6 +118,12 @@
                                         "type": "string",
                                         "minLength": 5,
                                         "maxLength": 255
+                                    },
+                                    "visibility": {
+                                        "description": "Visibilitas laporan bersifat open atau close",
+                                        "type": "string",
+                                        "minLength": 4,
+                                        "maxLength": 5
                                     }
                                 }
                             }
@@ -126,7 +132,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "sukses buat complaint baru",
+                        "description": "sukses buat laporan peduli lingkungan (complaint) baru",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -135,7 +141,7 @@
                                 "examples": {
                                     "success": {
                                         "value": {
-                                            "message": "success create complaint"
+                                            "message": "success create public environment care"
                                         }
                                     }
                                 }
@@ -155,6 +161,80 @@
                                             "errors": [
                                                 "The picture evidence 1 field is required"
                                             ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    }
+                }
+            },
+            "get": {
+                "description": "Dapatkan daftar laporan peduli lingkungan public, peduli lingkungan milik orang lain yang bersifat visibility open. jika laporan bersifat visibility close dan itu adalah kepemelikan sendiri user, maka laporan akan diberikan, serta adanya fitur pencarian laporan",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "description": "cari laporan dengan nomor laporan, description, status",
+                        "name": "q",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "search by nomor laporan": {
+                                "value": "202305000001"
+                            },
+                            "search by status": {
+                                "value": "Menunggu"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar laporan peduli lingkungan yang bersifat open dan close jika dibuat user sendiri, serta hasil pencarian jika dikirim menghasilkan format yang sama",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "uuid",
+                                                    "environmental_care_number": "202305000001",
+                                                    "status": "waiting",
+                                                    "description": "Mohon kepada petugas untuk segera dilakakan pemangkasan pohon",
+                                                    "thumbnail": "https://",
+                                                    "timestamps": "22-07-2021 : 09:47"
+                                                },
+                                                {
+                                                    "id": "uuid",
+                                                    "environmental_care_number": "202305000002",
+                                                    "status": "waiting",
+                                                    "description": "",
+                                                    "thumbnail": "https://",
+                                                    "timestamps": "22-07-2021 : 12:47"
+                                                }
+                                            ],
+                                            "links": {
+                                                "next_page_url": "https://localhost:8000/enviroment-cares/public-requests?cursor=eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_page_url": null
+                                            },
+                                            "meta": {
+                                                "path": "http:\/\/127.0.0.1:8000/environment-cares/public-requests",
+                                                "per_page": 10,
+                                                "next_cursor": "eyJpZCI6MTAsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0",
+                                                "prev_cursor": null
+                                            }
                                         }
                                     }
                                 }
