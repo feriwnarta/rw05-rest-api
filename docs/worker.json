@@ -754,18 +754,27 @@
                                         "value": {
                                             "data": {
                                                 "title": "penilaian landscape",
-                                                "line_chart_data": [
+                                                "line_charts": [
                                                     {
-                                                        "title": "Taman dan kebersihan",
-                                                        "percentage": "75%",
-                                                        "point": [
-                                                            100,
-                                                            120,
-                                                            130
-                                                        ],
-                                                        "pic": "PT Delcoin"
+                                                        "id": "uuid",
+                                                        "name": "Taman dan kebersihan"
+                                                    },
+                                                    {
+                                                        "id": "uuid",
+                                                        "name": "Perawatan kolam"
                                                     }
                                                 ],
+                                                "initial_line_chart": {
+                                                    "title": "Taman dan kebersihan",
+                                                    "percentage": "75%",
+                                                    "reduction_percentage": "25%",
+                                                    "point": [
+                                                        100,
+                                                        120,
+                                                        130
+                                                    ],
+                                                    "pic": "PT Delcoin"
+                                                },
                                                 "pie_chart_data": {
                                                     "title": "Data laporan landscape",
                                                     "point": [
@@ -786,6 +795,68 @@
                                                             "status": "Selesai"
                                                         }
                                                     ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/workers/environment-cares/public-request/stats/line-chart/{id}": {
+            "get": {
+                "summary": "mengambil data line chart terbaru berdasarkan id penilaian yang dipilih",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/authorization"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 36,
+                            "maxLength": 36
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses dapatkan data penilain yang dipilih",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "data": {
+                                                "title": "penilaian landscape",
+                                                "line_charts": [
+                                                    {
+                                                        "id": "uuid",
+                                                        "name": "Taman dan kebersihan"
+                                                    },
+                                                    {
+                                                        "id": "uuid",
+                                                        "name": "Perawatan kolam"
+                                                    }
+                                                ],
+                                                "initial_line_chart": {
+                                                    "title": "Perawatan kolam",
+                                                    "percentage": "80%",
+                                                    "reduction_percentage": "25%",
+                                                    "point": [
+                                                        100,
+                                                        120,
+                                                        130
+                                                    ],
+                                                    "pic": "PT Kolam"
                                                 }
                                             }
                                         }
