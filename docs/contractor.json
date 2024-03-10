@@ -47,6 +47,32 @@
                         }
                     }
                 }
+            },
+            "422Invalid": {
+                "description": "gagal memproses resource saat content tidak valid (id tidak ada / process sudah terjadi)",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array"
+                        },
+                        "examples": {
+                            "errors id not found": {
+                                "value": {
+                                    "errors": [
+                                        "id environment care not found"
+                                    ]
+                                }
+                            },
+                            "error id sudah diterima": {
+                                "value": {
+                                    "errors": [
+                                        "environment care has been accepted"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
@@ -232,30 +258,7 @@
                         "$ref": "#/components/responses/401Unauthorized"
                     },
                     "422": {
-                        "description": "response saat id yang dikirim tidak ada didatabase",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array"
-                                },
-                                "examples": {
-                                    "errors id not found": {
-                                        "value": {
-                                            "errors": [
-                                                "id environment care not found"
-                                            ]
-                                        }
-                                    },
-                                    "error id sudah diterima": {
-                                        "value": {
-                                            "errors": [
-                                                "environment care has been accepted"
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/422Invalid"
                     }
                 }
             }
@@ -444,6 +447,12 @@
                                 }
                             }
                         }
+                    },
+                    "401" : {
+                        "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422Invalid"
                     }
                 }
             }
@@ -649,6 +658,9 @@
                     },
                     "401": {
                         "$ref": "#/components/responses/401Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422Invalid"
                     }
                 }
             }
